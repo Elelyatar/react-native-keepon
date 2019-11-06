@@ -1,20 +1,20 @@
 {
-    "name": "react-native-keep-on",
-    "version": "1.0.0",
-    "description": "Turn the screen on and keep it like that.",
-    "main": "index.js",
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/methce/react-native-keepon.git"
-    },
-    "keywords": [
-      "react-native",
-      "ios",
-      "android",
-      "awake",
-      "screen",
-      "lock",
-      "sleep"
-    ],
-    "author": "Roberto Foureaux"
-  }
+  "name": "react-native-keep-on",
+  "version": "1.0.0",
+  "description": "Turn the screen on and keep it like that.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/methce/react-native-keepon.git"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "awake",
+    "screen",
+    "lock",
+    "sleep"
+  ],
+  "author": "Roberto Foureaux"
+}
