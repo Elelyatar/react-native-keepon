@@ -8,12 +8,12 @@ import com.facebook.react.uimanager.ViewManager;
 
 import java.util.*;
 
-public class KeepOnPackage implements ReactPackage {
+public class KCKeepOnPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new KeepOn(reactContext));
+        modules.add(new KCKeepOn(reactContext));
         return modules;
     }
 
