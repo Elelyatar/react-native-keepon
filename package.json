@@ -1,6 +1,6 @@
 {
   "name": "react-native-keep-on",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Turn the screen on and keep it like that.",
   "main": "index.js",
   "repository": {
