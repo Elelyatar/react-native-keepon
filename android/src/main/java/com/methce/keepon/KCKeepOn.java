@@ -52,4 +52,32 @@ public class KCKeepOn extends ReactContextBaseJavaModule {
             });
         }
     }
+
+    @ReactMethod
+    public void addLightOut() {
+        final Activity activity = getCurrentActivity();
+
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_OFF);
+                }
+            });
+        }
+    }
+
+    @ReactMethod
+    public void RemoveLightOut() {
+        final Activity activity = getCurrentActivity();
+
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_OFF);
+                }
+            });
+        }
+    }
 }

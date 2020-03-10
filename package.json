@@ -16,5 +16,8 @@
     "lock",
     "sleep"
   ],
-  "author": "Roberto Foureaux"
+  "author": "Roberto Foureaux",
+  "dependencies": {
+    "react-native-proximity": "^3.0.0"
+  }
 }
