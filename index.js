@@ -8,37 +8,38 @@ let mounted = 0;
 
 export default class KeepOn extends Component<{}> {
   static activate() {
-    NativeModules.KCKeepOn.activate();
+    NativeModules.KeepOn.activate();
   }
 
   static deactivate() {
-    NativeModules.KCKeepOn.deactivate();
+    NativeModules.KeepOn.deactivate();
   }
 
-  static lightOn() {
-    NativeModules.KCKeepOn.RemoveLightOut();
+  static turnScreenOn() {
+    NativeModules.KeepOn.turnScreenOn();
   }
 
-  static lightOut() {
-    NativeModules.KCKeepOn.addLightOut();
+  static turnScreenOff() {
+    NativeModules.KeepOn.turnScreenOff();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     mounted++;
     KeepOn.activate();
-    Proximity.addListener(this._proximityListener);
+    await Proximity.addListener(this._proximityListener);
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     mounted--;
     if (!mounted) {
-      NativeModules.KCKeepOn.RemoveLightOut();
       KeepOn.deactivate();
     }
+    await Proximity.removeListener(this._proximityListener);
   }
 
   _proximityListener(data) {
     console.log("proximity:", data.proximity, "distance:", data.distance);
+    KeepOn.turnScreenOff();
   }
 
   render() {

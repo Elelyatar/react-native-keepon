@@ -13,9 +13,9 @@ import android.os.PowerManager;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
@@ -44,7 +44,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class KCKeepOn extends ReactContextBaseJavaModule implements LifecycleEventListener{
+public class KeepOn extends ReactContextBaseJavaModule implements LifecycleEventListener{
 
     private static final String REACT_NATIVE_MODULE_NAME = "KeepOn";
     private static final String TAG = REACT_NATIVE_MODULE_NAME;
@@ -58,25 +58,40 @@ public class KCKeepOn extends ReactContextBaseJavaModule implements LifecycleEve
     private WindowManager.LayoutParams lastLayoutParams;
     private WindowManager mWindowManager;
     // -- Proximity Manager
-    private final keepOnProximityManager proximityManager;
-    private final keepOnWakeLockUtils wakeLockUtils;
-    
-    public KCKeepOn(ReactApplicationContext reactContext) {
+    private final KeepOnManager proximityManager;
+    private final KeepOnWakeLockUtils wakeLockUtils;
+
+    @Override
+    public String getName() {
+        return REACT_NATIVE_MODULE_NAME;
+    }
+
+    public KeepOn(ReactApplicationContext reactContext) {
         super(reactContext);
         reactContext.addLifecycleEventListener(this);
         mWindowManager = (WindowManager) reactContext.getSystemService(Context.WINDOW_SERVICE);
         mPowerManager = (PowerManager) reactContext.getSystemService(Context.POWER_SERVICE);
         mRequestPermissionCodePromises = new SparseArray<Promise>();
         mRequestPermissionCodeTargetPermission = new SparseArray<String>();
-        proximityManager = KeepOnProximityManager.create(reactContext, this);
-        wakeLockUtils = new ProximityWakeLockUtils(reactContext);
-    }
-    
-    @Override
-    public String getName() {
-        return "KCKeepOn";
+        proximityManager = KeepOnManager.create(reactContext, this);
+        wakeLockUtils = new KeepOnWakeLockUtils(reactContext);
     }
 
+    private void sendEvent(final String eventName, @Nullable WritableMap params) {
+        try {
+            ReactContext reactContext = getReactApplicationContext();
+            if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
+                reactContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit(eventName, params);
+            } else {
+                Log.e(TAG, "sendEvent(): reactContext is null or not having CatalystInstance yet.");
+            }
+        } catch (RuntimeException e) {
+            Log.e(TAG, "sendEvent(): java.lang.RuntimeException: Trying to invoke JS before CatalystInstance has been set!");
+        }
+    }
+    
     @ReactMethod
     public void activate() {
         final Activity activity = getCurrentActivity();
@@ -103,10 +118,10 @@ public class KCKeepOn extends ReactContextBaseJavaModule implements LifecycleEve
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    activity.getWindow().clearFlags(android.view.lastLayoutParams.FLAG_SHOW_WHEN_LOCKED);
-                    activity.getWindow().clearFlags(android.view.lastLayoutParams.FLAG_DISMISS_KEYGUARD);
-                    activity.getWindow().clearFlags(android.view.lastLayoutParams.FLAG_TURN_SCREEN_ON);
-                    activity.getWindow().clearFlags(android.view.lastLayoutParams.FLAG_KEEP_SCREEN_ON);
+                    activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+                    activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+                    activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                    activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 }
             });
         }
@@ -154,13 +169,11 @@ public class KCKeepOn extends ReactContextBaseJavaModule implements LifecycleEve
     }
 
     public void onProximitySensorChangedState(boolean isNear) {
-        if (automatic && getSelectedAudioDevice() == AudioDevice.EARPIECE) {
             if (isNear) {
                 turnScreenOff();
             } else {
                 turnScreenOn();
             }
-        }
         WritableMap data = Arguments.createMap();
         data.putBoolean("isNear", isNear);
         sendEvent("Proximity", data);
@@ -219,5 +232,23 @@ public class KCKeepOn extends ReactContextBaseJavaModule implements LifecycleEve
             Log.d(TAG, "turnScreenOff(): proximity lock is not supported. try manually.");
             manualTurnScreenOff();
         }
+    }
+
+    @Override
+    public void onHostResume() {
+        Log.d(TAG, "onResume()");
+        //resume();
+    }
+
+    @Override
+    public void onHostPause() {
+        Log.d(TAG, "onPause()");
+        //pause();
+    }
+
+    @Override
+    public void onHostDestroy() {
+        Log.d(TAG, "onDestroy()");
+        //destroy();
     }
 }
