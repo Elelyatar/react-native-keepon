@@ -23,18 +23,19 @@ export default class KeepOn extends Component<{}> {
     NativeModules.KeepOn.turnScreenOff();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     mounted++;
     KeepOn.activate();
-    await Proximity.addListener(this._proximityListener);
+    Proximity.addListener(this._proximityListener);
   }
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     mounted--;
     if (!mounted) {
       KeepOn.deactivate();
+      KeepOn.turnScreenOn();
     }
-    await Proximity.removeListener(this._proximityListener);
+    Proximity.removeListener(this._proximityListener);
   }
 
   _proximityListener(data) {
