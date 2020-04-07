@@ -15,31 +15,17 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(keepON)
+RCT_EXPORT_METHOD(activate)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     });
 }
 
-RCT_EXPORT_METHOD(keepOFF)
+RCT_EXPORT_METHOD(deactivate)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    });
-}
-
-RCT_EXPORT_METHOD(unkeepON)
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        beginIgnoringInteractionEvents()
-    });
-}
-
-RCT_EXPORT_METHOD(unkeepOFF)
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        endIgnoringInteractionEvents()
+        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     });
 }
 
