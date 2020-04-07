@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/methce/react-native-keepon.git"
   },
+  "homepage": "https://github.com/methce/react-native-keepon",
   "keywords": [
     "react-native",
     "ios",
@@ -19,5 +20,6 @@
   "dependencies": {
     "react-native-proximity": "^3.0.0"
   },
-  "author": "Roberto Foureaux"
+  "author": "Roberto Foureaux",
+  "license": "MIT"
 }
