@@ -8,7 +8,7 @@
 {
     if ((self = [super init])) {
         [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
+        
     }
     return self;
 }
@@ -26,6 +26,20 @@ RCT_EXPORT_METHOD(deactivate)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    });
+}
+
+RCT_EXPORT_METHOD(turnScreenOn)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    });
+}
+
+RCT_EXPORT_METHOD(turnScreenOff)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
     });
 }
 
