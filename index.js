@@ -1,12 +1,17 @@
 // @flow
 
 import React, { Component } from "react";
-import { NativeModules } from "react-native";
+import { NativeModules, Platform } from "react-native";
 import Proximity from "react-native-proximity";
 
 let mounted = 0;
 
 export default class KeepOn extends Component<{}> {
+  constructor(props){
+    super(props)
+
+  }
+
   static activate() {
     NativeModules.KeepOn.activate();
   }
@@ -23,7 +28,16 @@ export default class KeepOn extends Component<{}> {
     NativeModules.KeepOn.turnScreenOff();
   }
 
-  componentDidMount() {
+  static isOnSpeakerMode(value){
+    if (value) {
+      Proximity.removeListener(this._proximityListener);
+      KeepOn.turnScreenOn();
+    } else {
+      Proximity.addListener(this._proximityListener);
+    }
+  }
+
+  componentWillMount() {
     mounted++;
     KeepOn.activate();
     Proximity.addListener(this._proximityListener);
@@ -40,7 +54,7 @@ export default class KeepOn extends Component<{}> {
 
   _proximityListener(data) {
     console.log("proximity:", data.proximity, "distance:", data.distance);
-    KeepOn.turnScreenOff();
+    if(Platform.OS == "android")KeepOn.turnScreenOff();
   }
 
   render() {
