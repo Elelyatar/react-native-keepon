@@ -30,17 +30,17 @@ export default class KeepOn extends Component<{}> {
 
   static isOnSpeakerMode(value){
     if (value) {
-      Proximity.removeListener(this._proximityListener);
+      // Proximity.removeListener(this._proximityListener);
       KeepOn.turnScreenOn();
     } else {
-      Proximity.addListener(this._proximityListener);
+      // Proximity.addListener(this._proximityListener);
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     mounted++;
     KeepOn.activate();
-    Proximity.addListener(this._proximityListener);
+    // Proximity.addListener(this._proximityListener);
   }
 
   componentWillUnmount() {
@@ -49,13 +49,12 @@ export default class KeepOn extends Component<{}> {
       KeepOn.deactivate();
       KeepOn.turnScreenOn();
     }
-    Proximity.removeListener(this._proximityListener);
+    // Proximity.removeListener(this._proximityListener);
   }
 
-  _proximityListener(data) {
-    console.log("proximity:", data.proximity, "distance:", data.distance);
-    if(Platform.OS == "android")KeepOn.turnScreenOff();
-  }
+  // _proximityListener(data) {
+  //   if(Platform.OS == "android")KeepOn.turnScreenOff();
+  // }
 
   render() {
     return null;
