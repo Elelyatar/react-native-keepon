@@ -17,9 +17,6 @@
     "lock",
     "sleep"
   ],
-  "dependencies": {
-    "react-native-proximity": "^3.0.0"
-  },
   "author": "Roberto Foureaux",
   "license": "MIT"
 }

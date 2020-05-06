@@ -2,7 +2,6 @@
 
 import React, { Component } from "react";
 import { NativeModules, Platform } from "react-native";
-import Proximity from "react-native-proximity";
 
 let mounted = 0;
 
@@ -20,41 +19,34 @@ export default class KeepOn extends Component<{}> {
     NativeModules.KeepOn.deactivate();
   }
 
-  static turnScreenOn() {
-    NativeModules.KeepOn.turnScreenOn();
+  static startProximitySensor() {
+    NativeModules.KeepOn.startProximitySensor();
   }
-
-  static turnScreenOff() {
-    NativeModules.KeepOn.turnScreenOff();
+  static stopProximitySensor() {
+    NativeModules.KeepOn.stopProximitySensor();
   }
 
   static isOnSpeakerMode(value){
     if (value) {
-      // Proximity.removeListener(this._proximityListener);
-      KeepOn.turnScreenOn();
+      KeepOn.stopProximitySensor();
     } else {
-      // Proximity.addListener(this._proximityListener);
+      KeepOn.startProximitySensor();
     }
   }
 
   componentDidMount() {
     mounted++;
     KeepOn.activate();
-    // Proximity.addListener(this._proximityListener);
+    KeepOn.startProximitySensor();
   }
 
   componentWillUnmount() {
     mounted--;
     if (!mounted) {
-      KeepOn.deactivate();
-      KeepOn.turnScreenOn();
+     KeepOn.deactivate();
     }
-    // Proximity.removeListener(this._proximityListener);
+    KeepOn.stopProximitySensor();
   }
-
-  // _proximityListener(data) {
-  //   if(Platform.OS == "android")KeepOn.turnScreenOff();
-  // }
 
   render() {
     return null;

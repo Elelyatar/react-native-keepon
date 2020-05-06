@@ -179,7 +179,7 @@ public class KeepOn extends ReactContextBaseJavaModule implements LifecycleEvent
         sendEvent("Proximity", data);
     }
 
-
+    @ReactMethod
     private void startProximitySensor() {
         if (!proximityManager.isProximitySupported()) {
             Log.d(TAG, "Proximity Sensor is not supported.");
@@ -198,6 +198,7 @@ public class KeepOn extends ReactContextBaseJavaModule implements LifecycleEvent
         isProximityRegistered = true;
     }
 
+    @ReactMethod
     private void stopProximitySensor() {
         if (!proximityManager.isProximitySupported()) {
             Log.d(TAG, "Proximity Sensor is not supported.");

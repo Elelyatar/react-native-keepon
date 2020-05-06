@@ -5,6 +5,10 @@
 #else
 #import "React/RCTBridgeModule.h"
 #endif
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
 
 @interface KeepOn : NSObject <RCTBridgeModule>
 @end
